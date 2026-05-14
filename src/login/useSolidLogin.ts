@@ -29,13 +29,13 @@ export function validateIssuerUrl(url: string): { valid: boolean; error: string 
 
 export interface UseSolidLoginOptions {
   /** URL the IdP should redirect back to after authentication. Defaults to window.location.href. */
-  redirectUrl?: string;
+  redirectUrl: string;
   defaultIssuer?: string;
   presetIssuers?: PresetIssuer[];
   onAlreadyLoggedIn?: () => void;
 }
 
-export function useSolidLogin(options: UseSolidLoginOptions = {}) {
+export function useSolidLogin(options: UseSolidLoginOptions) {
   const { session, login } = useSolidAuth();
   const [issuerInput, setIssuerInput] = useState(options.defaultIssuer ?? "");
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +53,7 @@ export function useSolidLogin(options: UseSolidLoginOptions = {}) {
     setError(null);
     setIsLoading(true);
     try {
-      await login(trimmed, options.redirectUrl ? { redirectUrl: options.redirectUrl } : undefined);
+      await login(trimmed, options.redirectUrl);
       return true;
     } catch (e) {
       console.error("Login failed:", e);

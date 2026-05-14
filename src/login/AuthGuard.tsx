@@ -126,12 +126,12 @@ function AuthGuardContent({
 
   // ── Effect: persist returnTo when arriving at /login?returnTo=… ──────────
   useEffect(() => {
-    if (typeof window === "undefined" || !isLoginPage || session.isLoggedIn) return;
+    if (typeof window === "undefined" || !isLoginPage || session.isActive) return;
     const returnTo = searchParams.get("returnTo");
     if (isValidReturnPath(returnTo)) {
       storageSet(sessionStorage, RETURN_TO_KEY, returnTo);
     }
-  }, [isLoginPage, session.isLoggedIn]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isLoginPage, session.isActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Effect: main redirect logic ──────────────────────────────────────────
   //
@@ -151,7 +151,7 @@ function AuthGuardContent({
     const isLogin = path === config.loginPath;
 
     // 1. OAuth callback completed — redirect to the saved return path
-    if (isCallback && session.isLoggedIn) {
+    if (isCallback && session.isActive) {
       hasRedirectedRef.current = true;
       let target = resolveReturnTo(sp, config.loginPath, config.homePath);
       if (target === config.loginPath) target = config.homePath;
@@ -161,7 +161,7 @@ function AuthGuardContent({
     }
 
     // 2. Already logged in but still on /login — redirect away
-    if (session.isLoggedIn && isLogin && !isCallback) {
+    if (session.isActive && isLogin && !isCallback) {
       hasRedirectedRef.current = true;
       let target = resolveReturnTo(sp, config.loginPath, config.homePath);
       if (target === config.loginPath) target = config.homePath;
@@ -171,7 +171,7 @@ function AuthGuardContent({
     }
 
     // 3. Not logged in on a protected page — redirect to login
-    if (!session.isLoggedIn && !isLogin && !isCallback) {
+    if (!session.isActive && !isLogin && !isCallback) {
       hasRedirectedRef.current = true;
       const current = path || "/";
       if (current !== config.loginPath && current !== config.homePath) {
@@ -183,7 +183,7 @@ function AuthGuardContent({
           : `${config.loginPath}?returnTo=${encodeURIComponent(current)}`;
       navigation.replace(loginUrl);
     }
-  }, [ranInitialAuthCheck, session.isLoggedIn, pathname, nav, config.loginPath, config.homePath]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ranInitialAuthCheck, session.isActive, pathname, nav, config.loginPath, config.homePath]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -191,7 +191,7 @@ function AuthGuardContent({
     if (process.env.NODE_ENV !== "production") {
       console.warn(
         "@solid/react-component: AuthGuard requires SolidLoginNavigationProvider " +
-          "(or use '@solid/react-component/login/next')",
+        "(or use '@solid/react-component/login/next')",
       );
     }
     return <>{children}</>;
@@ -199,8 +199,8 @@ function AuthGuardContent({
 
   if (!ranInitialAuthCheck) return <>{fallback}</>;
   if (isOAuthCallback) return <>{fallback}</>;
-  if (!session.isLoggedIn && !isLoginPage) return null;
-  if (session.isLoggedIn && isLoginPage) return null;
+  if (!session.isActive && !isLoginPage) return null;
+  if (session.isActive && isLoginPage) return null;
 
   return <>{children}</>;
 }

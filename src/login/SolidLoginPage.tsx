@@ -15,7 +15,7 @@ export interface SolidLoginPageProps {
   /** Redirect when already logged in (e.g. router.replace("/")) */
   onAlreadyLoggedIn?: () => void;
   /** URL the IdP should redirect back to after auth. Defaults to window.location.href (the login page). */
-  redirectUrl?: string;
+  redirectUrl: string;
   defaultIssuer?: string;
   presetIssuers?: PresetIssuer[];
 
@@ -181,8 +181,8 @@ export function SolidLoginPage({
   const listboxId = `${inputId}-listbox`;
 
   useEffect(() => {
-    if (session.isLoggedIn && onAlreadyLoggedIn) onAlreadyLoggedIn();
-  }, [session.isLoggedIn, onAlreadyLoggedIn]);
+    if (session.isActive && onAlreadyLoggedIn) onAlreadyLoggedIn();
+  }, [session.isActive, onAlreadyLoggedIn]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -212,7 +212,7 @@ export function SolidLoginPage({
     );
   }, [issuerInput, presets]);
 
-  if (session.isLoggedIn) return null;
+  if (session.isActive) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -505,7 +505,7 @@ export function SolidLoginPage({
                     outline: "none",
                     boxSizing: "border-box",
                   }}
-                  onBlur={() => {}}
+                  onBlur={() => { }}
                 />
                 <button
                   type="button"

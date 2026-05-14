@@ -31,7 +31,7 @@ Reusable React components for [Solid](https://solidproject.org/) apps. One packa
 | Dependency | Version | Notes |
 |---|---|---|
 | **React** | 18+ | |
-| **[@ldo/solid-react](https://www.npmjs.com/package/@ldo/solid-react)** | ≥ 1.0.0-alpha.33 | Your app must be wrapped in `BrowserSolidLdoProvider` |
+| **[@ldo/solid-react](https://www.npmjs.com/package/@ldo/solid-react)** | ≥ 1.0.0-alpha.50 | Your app must be wrapped in `BrowserSolidLdoProvider` |
 | **Next.js** *(optional)* | 13+ (App Router) | Only needed for the Next.js adapter |
 
 ---
@@ -137,6 +137,7 @@ export default function Login() {
         <AuthGuard fallback={loadingFallback}>
           <SolidLoginPage
             onAlreadyLoggedIn={() => router.replace("/")}
+            redirectUrl="http://localhost:3000"
             logo="/your-logo.svg"
             logoAlt="My App Logo"
             title="Sign in"

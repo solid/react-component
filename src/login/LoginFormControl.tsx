@@ -15,12 +15,14 @@ export interface LoginFormControlProps {
   }) => ReactNode;
   defaultIssuer?: string;
   presetIssuers?: { label: string; value: string; secondaryLabel?: string }[];
+  redirectUrl: string;
 }
 
 export function LoginFormControl({
   children,
   defaultIssuer,
   presetIssuers,
+  redirectUrl
 }: LoginFormControlProps) {
   const {
     session,
@@ -30,9 +32,9 @@ export function LoginFormControl({
     error,
     presetIssuers: presets,
     validateAndSubmit,
-  } = useSolidLogin({ defaultIssuer, presetIssuers });
+  } = useSolidLogin({ defaultIssuer, presetIssuers, redirectUrl });
 
-  if (session.isLoggedIn) return null;
+  if (session.isActive) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -45,7 +45,7 @@
     "test:coverage": "jest --coverage"
   },
   "peerDependencies": {
-    "@ldo/solid-react": ">=1.0.0-alpha.33",
+    "@ldo/solid-react": ">=1.0.0-alpha.50",
     "react": ">=18.0.0"
   },
   "optionalPeerDependencies": {
